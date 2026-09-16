@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CIM Vancouver Branch — Student Awards Portal</title>
+<style>
+:root {
+  --navy: #0b2340; --navy-light: #123a63; --gold: #c99a2e; --bg: #f5f7fa;
+  --card: #ffffff; --border: #e0e4ea; --text: #1c2530; --hint: #6b7686;
+  --green: #1f8a4c; --red: #b3261e;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); line-height: 1.5; }
+.wrap { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+.site-header { background: var(--navy); color: #fff; padding: 16px 0; }
+.site-header .wrap { display: flex; align-items: center; justify-content: space-between; }
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-center { justify-content: center; margin-bottom: 20px; }
+.brand-title { font-weight: 700; font-size: 16px; }
+.brand-sub { font-size: 12px; color: #c7d3e0; }
+.admin-link { color: #fff; opacity: 0.85; text-decoration: none; font-size: 14px; cursor: pointer; background: none; border: none; }
+.admin-link:hover { opacity: 1; text-decoration: underline; }
+main.wrap { padding-top: 28px; padding-bottom: 60px; }
+.intro-card, .login-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 24px 28px; margin-bottom: 24px; }
+h1 { font-size: 22px; margin: 0 0 10px; color: var(--navy); }
+h2 { font-size: 18px; color: var(--navy); }
+.demo-banner { background: #fff4d9; border: 1px solid #f0d38a; color: #6b4e00; padding: 10px 16px; border-radius: 8px; font-size: 13px; margin-bottom: 18px; }
+.scholarship-list summary { cursor: pointer; color: var(--navy-light); font-weight: 600; margin-top: 10px; }
+.scholarship-list p { margin-top: 12px; }
+.elig-text { color: var(--hint); font-size: 13px; margin-top: 8px; }
+.alert { padding: 14px 18px; border-radius: 8px; margin-bottom: 18px; }
+.alert-error { background: #fdecea; border: 1px solid #f2b8b5; color: var(--red); }
+.alert-success { background: #eaf6ee; border: 1px solid #b7ddc3; color: var(--green); }
+.alert-warning { background: #fff4d9; border: 1px solid #f0d38a; color: #6b4e00; }
+.app-form fieldset { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px 24px; margin-bottom: 20px; }
+.app-form legend { font-weight: 700; color: var(--navy); padding: 0 6px; }
+.app-form label { display: block; font-size: 13px; font-weight: 600; color: #40495a; margin-bottom: 14px; }
+.app-form input[type="text"], .app-form input[type="email"], .app-form input[type="tel"],
+.app-form input[type="password"], .app-form select, .app-form textarea {
+  display: block; width: 100%; margin-top: 6px; padding: 9px 11px; border: 1px solid var(--border);
+  border-radius: 6px; font-size: 16px; font-family: inherit; color: var(--text); background: #fff;
+}
+.app-form input[type="file"] { margin-top: 6px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.hint { color: var(--hint); font-size: 12px; }
+.hint.center { text-align: center; }
+.btn-primary { display: inline-block; background: var(--navy); color: #fff; border: none; padding: 12px 22px; border-radius: 7px; font-weight: 700; font-size: 15px; cursor: pointer; text-decoration: none; }
+.btn-primary:hover { background: var(--navy-light); }
+.btn-primary:disabled { opacity: 0.6; cursor: default; }
+.btn-block { width: 100%; }
+.btn-secondary { display: inline-block; background: #fff; color: var(--navy); border: 1px solid var(--navy); padding: 8px 14px; border-radius: 7px; font-weight: 600; font-size: 13px; cursor: pointer; text-decoration: none; }
+.btn-secondary:hover { background: #eef2f7; }
+.btn-small { padding: 5px 10px; font-size: 12px; }
+.site-footer { padding: 20px 0 40px; color: var(--hint); font-size: 12px; }
+.login-body-wrap { display: flex; align-items: center; justify-content: center; min-height: 70vh; background: linear-gradient(160deg, var(--navy), var(--navy-light)); border-radius: 12px; padding: 40px 20px; }
+.login-card { width: 360px; background: transparent; border-color: rgba(255,255,255,0.16); box-shadow: none; }
+.login-card .brand-title { color: #fff; }
+.login-card .brand-sub { color: #c7d3e0; }
+.login-card label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 14px; color: #dbe4f0; }
+.login-card input { display: block; width: 100%; margin-top: 6px; padding: 10px 11px; border: 1px solid rgba(255,255,255,0.28); border-radius: 6px; font-size: 16px; background: rgba(255,255,255,0.06); color: #fff; }
+.login-card input::placeholder { color: #9fb0c6; }
+.login-card .hint { color: #b8c4d6; }
+.login-card .hint a { color: #dbe4f0; }
+.login-card .btn-primary { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.35); }
+.login-card .btn-primary:hover { background: rgba(255,255,255,0.2); }
+.login-card .alert-error { background: rgba(179,38,30,0.25); border: 1px solid rgba(255,255,255,0.28); color: #ffd7d3; }
+.success-card { text-align: center; }
+.success-card h1 { color: var(--green); }
+.rank-table { width: 100%; border-collapse: collapse; background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.rank-table th, .rank-table td { padding: 12px 14px; border-bottom: 1px solid var(--border); font-size: 13px; text-align: left; vertical-align: middle; }
+.rank-table th { background: #eef2f7; color: var(--navy); font-size: 12px; text-transform: uppercase; letter-spacing: 0.03em; }
+.rank-table tr:last-child td { border-bottom: none; }
+.rank-cell { font-weight: 800; color: var(--navy); }
+.pct-pill { background: #eef2f7; color: var(--navy); border-radius: 999px; padding: 4px 10px; font-size: 12px; font-weight: 700; }
+.empty-state { color: var(--hint); padding: 30px; text-align: center; }
+.criteria-legend { padding-left: 18px; font-size: 13px; }
+.criteria-legend li { margin-bottom: 6px; }
+.detail-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 16px 0; font-size: 14px; }
+.text-block { margin-top: 16px; }
+.text-block p { background: #f9fafb; padding: 12px 14px; border-radius: 8px; border: 1px solid var(--border); font-size: 14px; }
+.doc-links { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+.crit-yes { color: var(--green); font-weight: 700; }
+.crit-no { color: var(--hint); }
+.criteria-checklist { list-style: none; padding: 0; margin: 10px 0 0; font-size: 13px; }
+.criteria-checklist li { padding: 4px 0; }
+.criteria-checklist li.met { color: var(--green); }
+.criteria-checklist li.unmet { color: var(--hint); }
+.dashboard-section { margin-bottom: 32px; }
+.section-heading { font-size: 15px; font-weight: 700; padding: 8px 14px; border-radius: 8px; margin-bottom: 12px; display: inline-block; }
+.section-heading-eligible { background: #eaf6ee; color: var(--green); }
+.section-heading-ineligible { background: #f3f4f6; color: var(--hint); }
+.table-scroll { overflow-x: auto; }
+.scoring-table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 13px; }
+.scoring-table th, .scoring-table td { border: 1px solid var(--border); padding: 8px 10px; text-align: center; }
+.scoring-table th { background: #eef2f7; color: var(--navy); font-size: 12px; text-transform: uppercase; letter-spacing: 0.02em; }
+.scoring-table .judge-label { text-align: left; font-weight: 700; color: var(--navy); white-space: nowrap; }
+.scoring-table .row-total { font-weight: 700; color: var(--navy); }
+.scoring-table tr.ai-row { background: #fbf8f1; }
+.scoring-table tr.ai-row .judge-label { color: #8a6d1a; }
+.scoring-table tfoot td { font-weight: 700; background: #f9fafb; }
+.scoring-table .grand-total { color: var(--navy); font-size: 15px; }
+.score-input { width: 56px; padding: 6px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; text-align: center; }
+.ai-disclaimer { margin-top: 12px; font-style: italic; }
+.judge-name-input { display: block; width: 100%; min-width: 130px; margin-top: 6px; padding: 5px 7px; border: 1px solid var(--border); border-radius: 6px; font-size: 12px; font-weight: 400; color: var(--text); white-space: normal; }
+.ai-notes-label { display: block; font-size: 13px; font-weight: 600; color: #40495a; margin-top: 16px; }
+.ai-notes-textarea { display: block; width: 100%; margin-top: 6px; padding: 9px 11px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; font-family: inherit; color: var(--text); background: #fbf8f1; resize: vertical; }
+.hero-card { text-align: center; }
+.hero-card h1 { font-size: 26px; }
+.hero-card p { max-width: 640px; margin-left: auto; margin-right: auto; }
+.program-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 24px; }
+.program-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 24px; display: flex; flex-direction: column; }
+.program-card .program-eyebrow { color: var(--gold); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
+.program-card h2 { margin: 0 0 8px; }
+.program-card p.blurb { flex: 1; color: #40495a; font-size: 14px; }
+.program-card .program-meta { color: var(--hint); font-size: 12px; margin: 10px 0 16px; }
+.program-card .btn-primary { align-self: flex-start; }
+.switch-program-link { display: block; margin-bottom: 18px; font-size: 13px; }
+.rules-list { padding-left: 18px; font-size: 13px; }
+.rules-list li { margin-bottom: 8px; }
+.step-heading { font-size: 13px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 0.04em; margin: 0 0 10px; }
+.photo-thumb { width: 72px; height: 54px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border); background: #eef2f7; display: block; }
+.photo-preview-large { max-width: 100%; max-height: 480px; border-radius: 10px; border: 1px solid var(--border); margin: 16px 0; display: block; }
+.turnbull-table td.thumb-cell { width: 90px; }
+.rank-select { min-width: 150px; padding: 6px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; font-family: inherit; background: #fff; }
+.loading-state { padding: 60px 20px; text-align: center; color: var(--hint); }
+@media (max-width: 720px) {
+  .program-grid { grid-template-columns: 1fr; }
+  .turnbull-table td.thumb-cell { width: auto; }
+  .turnbull-table td.thumb-cell .photo-thumb { width: 100%; height: 140px; }
+}
+@media (max-width: 720px) {
+  .grid-2 { grid-template-columns: 1fr; }
+  .detail-grid { grid-template-columns: 1fr 1fr; }
+
+  /* Ranked applicant tables become stacked cards instead of a horizontally
+     scrolling table — much easier to read/tap on a phone. */
+  .rank-table { display: block; border: none; background: none; }
+  .rank-table thead { display: none; }
+  .rank-table tbody { display: block; }
+  .rank-table tr {
+    display: block;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+  }
+  .rank-table td {
+    display: block;
+    border-bottom: none;
+    padding: 6px 0;
+  }
+  .rank-table td[data-label]:not([data-label=""])::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--hint);
+    margin-bottom: 2px;
+  }
+  .rank-table td.rank-cell { font-size: 18px; }
+  .rank-table td.view-cell { padding-top: 10px; }
+  .rank-table td.view-cell button { width: 100%; padding: 11px; font-size: 14px; }
+
+  .site-header .wrap { flex-wrap: wrap; row-gap: 10px; }
+}
+
+@media (max-width: 420px) {
+  .brand-sub { display: none; }
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* ============================================================
+   CIM Vancouver Branch — Grad Studies Award & Turnbull Cup Portal
+   Live version: submissions, judge scores and rankings are sent
+   to a small Google Apps Script backend (Code.gs) which stores
+   them in a Google Sheet and stores uploaded files/photos in
+   Google Drive. See SETUP.md for how to deploy that backend.
+   ============================================================ */
+
+// ---- REQUIRED: paste your deployed Apps Script Web App URL here ----
+// (Deploy > New deployment > Web app > Execute as Me > Who has access: Anyone,
+// then copy the URL ending in /exec. See SETUP.md.)
+const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbwA2yhIWzT_Qe2u9UP1RnbtR5wQIJ_dhRqX-7bVqODcJQuk4HCjLn8XxVUIWM_P8S-LEQ/exec';
+const BACKEND_CONFIGURED = BACKEND_URL.indexOf('PASTE_YOUR_') !== 0;
+
+// Credentials are not stored in plaintext in this page — only a SHA-256 hash of
+// "username:password" is kept, and the submitted login is hashed the same way and
+// compared to it. The SAME hash is also required (as `key`) on every admin read/write
+// call to the backend, so it's checked server-side too, not just in this page's JS.
+// This is still not real authentication (view-source shows the hash, and swapping in a
+// different password just means re-hashing it) — treat it as a light deterrent, matching
+// the level of access-control a small volunteer-run contest actually needs.
+const ADMIN_CREDENTIAL_HASH = 'a6b76499777887a6e37a332d381deb8abca74dcab5e008f1ee6ed592547800d7';
+async function sha256Hex(str) {
+  const bytes = new TextEncoder().encode(str);
+  const digest = await crypto.subtle.digest('SHA-256', bytes);
+  return Array.from(new Uint8Array(digest)).map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+/* ---------------- backend helpers ---------------- */
+function readFileAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(new Error('Could not read ' + file.name));
+    reader.readAsDataURL(file);
+  });
+}
+// text/plain content-type keeps this a "simple request" so the browser skips a CORS
+// preflight (Apps Script Web Apps don't handle OPTIONS preflights well).
+async function postToBackend(payload) {
+  const res = await fetch(BACKEND_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw new Error('Server returned ' + res.status);
+  const data = await res.json();
+  if (!data.ok) throw new Error(data.error || 'Request failed');
+  return data;
+}
+async function getFromBackend(params) {
+  const qs = new URLSearchParams(params).toString();
+  const res = await fetch(BACKEND_URL + '?' + qs);
+  if (!res.ok) throw new Error('Server returned ' + res.status);
+  const data = await res.json();
+  if (!data.ok) throw new Error(data.error || 'Request failed');
+  return data;
+}
+// Drive files are shared "anyone with the link, view only" by the backend, so these
+// well-known Drive endpoints can embed/link to them directly from the public page.
+function driveThumb(fileId, size) { return fileId ? ('https://drive.google.com/thumbnail?id=' + encodeURIComponent(fileId) + '&sz=w' + size) : ''; }
+function driveFileUrl(fileMeta) { return fileMeta && fileMeta.url ? fileMeta.url : '#'; }
+
+const UBC = 'University of British Columbia';
+const SFU = 'Simon Fraser University';
+const OTHER_DEPARTMENT_VALUE = 'Other (please specify)';
+const ELIGIBLE_DEPARTMENTS = {
+  [UBC]: ['Mining Engineering', 'Materials Engineering', 'Earth and Ocean Sciences', 'Geological Engineering', OTHER_DEPARTMENT_VALUE],
+  [SFU]: ['Earth Sciences', OTHER_DEPARTMENT_VALUE],
+};
+const THESIS_BASED_PROGRAM_TYPES = ['Ph.D.', "Master's (Thesis-based / Research)"];
+const PROGRAM_TYPES = ['Ph.D.', "Master's (Thesis-based / Research)", 'Master of Engineering (M.Eng., non-thesis)'];
+
+// Shared across both programs — winners of either award must attend Student
+// Night in person to receive their award.
+const STUDENT_NIGHT_TEXT = 'Winners must be present at Student Night on November 26, 2026 at the Vancouver Convention Centre to receive their award.';
+
+const SCHOLARSHIP = {
+  id: 'grad-studies-award',
+  name: 'Grad Studies Award',
+  sponsor: 'CIM Vancouver Branch',
+  amount: '$2,000 (3 available)',
+  deadline: 'November 5, 2026',
+  eligibilityText: 'Contest open to all earth science and mineral engineering related graduate students in the first year of a M.A.Sc, M.Sc or Ph.D program in the Greater Vancouver area. Please see award announcement for application details. The successful applicants are selected by a panel of experts from the CIM Vancouver branch.',
+  detailedEligibilityText: "Per the award announcement: first-year graduate students enrolled in either a Ph.D. or research-based (thesis) Master's program at the University of British Columbia (Mining Engineering, Materials Engineering, Geological Engineering, or Earth and Ocean Sciences) or Simon Fraser University (Earth Sciences). If your program isn't listed, select \"Other (please specify)\" and tell us your program. Master of Engineering (M.Eng.) non-thesis students are not eligible for this award.",
+  applicationPackageText: "A complete application includes: a Research Summary of the applicant's current or proposed research (maximum 3 pages), a one-page Resume including contact information, a Cover Letter, and Proof of Enrollment documenting full-time registration as a first-year graduate student.",
+  studentNightText: STUDENT_NIGHT_TEXT,
+  otherDepartmentValue: OTHER_DEPARTMENT_VALUE,
+  criteria: [
+    { id: 'first-year-grad', label: 'First-year graduate student', weight: 2, check: (a) => a.firstYearGrad === 'Yes' },
+    { id: 'phd-or-thesis-masters', label: "Enrolled in a Ph.D. or research-based (thesis) Master's program (M.Eng. non-thesis is not eligible)", weight: 2, check: (a) => THESIS_BASED_PROGRAM_TYPES.includes(a.programType) },
+    { id: 'eligible-institution-department', label: 'Enrolled at UBC (Mining Engineering, Materials Engineering, Geological Engineering, or Earth and Ocean Sciences) or SFU (Earth Sciences)', weight: 2, check: (a) => !!(a.institution && a.department && (ELIGIBLE_DEPARTMENTS[a.institution] || []).includes(a.department)) },
+  ],
+};
+
+const TURNBULL_SCHOOL_OPTIONS = [
+  'BCIT Mining Technology',
+  'BCIT other',
+  'SFU Earth Sciences',
+  'SFU other',
+  'UBC Earth & Ocean Science',
+  'UBC Geological Engineering',
+  'UBC Materials Engineering',
+  'UBC Mining Engineering',
+  'UBC other',
+  'Other',
+];
+
+const TURNBULL_CUP = {
+  id: 'turnbull-cup',
+  name: 'Turnbull Cup Photo Contest',
+  sponsor: 'CIM Vancouver Branch',
+  amount: '$1,000 (top photo) + the Turnbull Cup awarded to the winning photographer’s student society',
+  deadline: 'November 5, 2026',
+  contactEmail: 'Alex.Doll@cimvancouver.org',
+  eligibilityText: 'Contest is open to all Earth-Science and Mineral Engineering related graduate, undergraduate, or technical college students in the greater Vancouver area.',
+  prizesText: 'The photographer of the single best photo submitted will be awarded a $1,000 prize and the student society the photographer belongs to will be awarded the Turnbull Cup. Judging will be done by the CIM Vancouver Branch Executive Committee.',
+  rules: [
+    'Photographer agrees that he/she personally took the photos and they were ethically obtained.',
+    'Photographer is granting CIM the right to use any photo submitted for other CIM related uses, including publishing on the Internet or print media.',
+    'Photos from worksites must be approved by the company if they are potentially injurious to the company. No photos of accident scenes, confidential process operations, or other sensitive material. If in doubt, ask your workplace.',
+    'Electronic submissions must be high quality JPG files (quality > 85%), no more than 2.5 Megabyte in size, and at least 1024x768 pixels in dimensions.',
+    'Photographers are expected to attend Student Night on November 26, 2026 at the Vancouver Convention Centre. The winner will be announced and the prize awarded at Student Night — the winner must be present to receive their award.',
+  ],
+  studentNightText: STUDENT_NIGHT_TEXT,
+  schoolOptions: TURNBULL_SCHOOL_OPTIONS,
+  photo: { maxBytes: 2.5 * 1024 * 1024, minWidth: 1024, minHeight: 768 },
+};
+
+/* ---------------- Judging rubric (mirrors scoring.js) ---------------- */
+const DIMENSIONS = [
+  { id: 'originality', label: 'Originality' },
+  { id: 'clarity', label: 'Clarity' },
+  { id: 'technical', label: 'Technical' },
+  { id: 'relevance', label: 'Relevance' },
+];
+const JUDGES = Array.from({ length: 10 }, (_, i) => ({ id: `judge${i + 1}`, label: `Judge ${i + 1}` }));
+const AI_ROW = { id: 'ai', label: 'Claude (AI Preliminary Read)' };
+const MIN_SCORE = 0;
+const MAX_SCORE = 10;
+const MAX_ROW_TOTAL = DIMENSIONS.length * MAX_SCORE; // 40
+const MAX_GRAND_TOTAL = MAX_ROW_TOTAL * JUDGES.length; // 120
+
+function emptyRow(kind) { const row = {}; if (kind === 'judge') row.name = ''; if (kind === 'ai') row.notes = ''; DIMENSIONS.forEach((d) => (row[d.id] = null)); return row; }
+function emptyJudgeScores() { const scores = {}; JUDGES.forEach((j) => (scores[j.id] = emptyRow('judge'))); scores[AI_ROW.id] = emptyRow('ai'); return scores; }
+function parseScoreValue(raw) {
+  if (raw === undefined || raw === null || String(raw).trim() === '') return null;
+  const n = Number(raw);
+  if (Number.isNaN(n)) return null;
+  return Math.max(MIN_SCORE, Math.min(MAX_SCORE, Math.round(n * 10) / 10));
+}
+function rowTotal(row) {
+  if (!row) return null;
+  const values = DIMENSIONS.map((d) => row[d.id]);
+  if (values.some((v) => v === null || v === undefined)) return null;
+  return Math.round(values.reduce((s, v) => s + v, 0) * 10) / 10;
+}
+function grandTotal(judgeScores) {
+  if (!judgeScores) return null;
+  const totals = JUDGES.map((j) => rowTotal(judgeScores[j.id]));
+  if (totals.some((t) => t === null)) return null;
+  return Math.round(totals.reduce((s, t) => s + t, 0) * 10) / 10;
+}
+
+/* ---------------- Eligibility scoring (mirrors ranking.js) ---------------- */
+function scoreAgainstScholarship(application, scholarship) {
+  const criteriaResults = scholarship.criteria.map((c) => ({ id: c.id, label: c.label, weight: c.weight, met: !!c.check(application) }));
+  const metCount = criteriaResults.filter((c) => c.met).length;
+  const totalCount = criteriaResults.length;
+  const weightedMet = criteriaResults.reduce((s, c) => s + (c.met ? c.weight : 0), 0);
+  const weightedTotal = criteriaResults.reduce((s, c) => s + c.weight, 0);
+  const percentage = weightedTotal === 0 ? 0 : Math.round((weightedMet / weightedTotal) * 100);
+  return { scholarshipId: scholarship.id, name: scholarship.name, metCount, totalCount, percentage, criteriaResults };
+}
+function scoreApplication(application) {
+  const best = scoreAgainstScholarship(application, SCHOLARSHIP);
+  return { best, meetsAllCriteria: !!best && best.metCount === best.totalCount && best.totalCount > 0 };
+}
+function splitByEligibility(applications) {
+  const eligible = applications
+    .filter((a) => a.scoring.meetsAllCriteria)
+    .sort((a, b) => new Date(a.submittedAt) - new Date(b.submittedAt));
+  const notEligible = applications
+    .filter((a) => !a.scoring.meetsAllCriteria)
+    .sort((a, b) => {
+      const pctDiff = (b.scoring.best?.percentage || 0) - (a.scoring.best?.percentage || 0);
+      if (pctDiff !== 0) return pctDiff;
+      const metDiff = (b.scoring.best?.metCount || 0) - (a.scoring.best?.metCount || 0);
+      if (metDiff !== 0) return metDiff;
+      return new Date(a.submittedAt) - new Date(b.submittedAt);
+    });
+  return { eligible, notEligible };
+}
+
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+function uid() { return 'app_' + Date.now() + '_' + Math.random().toString(16).slice(2); }
+
+// Populated from the backend when the admin dashboard is opened (see loadAdminData).
+// Regular visitors never fetch this list — only their own submission is sent, and only
+// to the backend, never back down to their browser.
+let applications = [];
+let turnbullSubmissions = [];
+let turnbullRankings = {
+  judges: Array.from({ length: 10 }, (_, i) => ({
+    id: `tjudge${i + 1}`, label: `Judge ${i + 1}`, name: '', picks: Array(5).fill(null),
+  })),
+};
+
+/* ---------------- Turnbull Cup 10-judge top-5 ranking tool ----------------
+   Mirrors turnbullRanking.js: 10 judges each pick and rank up to 5 favourite
+   entries (rank 1 = best). Points (5/4/3/2/1) tally into a leaderboard. */
+const TURNBULL_JUDGE_COUNT = 10;
+const TURNBULL_RANK_SLOTS = 5;
+const TURNBULL_RANK_POINTS = [5, 4, 3, 2, 1];
+function turnbullComputeLeaderboard(entries, rankings) {
+  const points = {};
+  entries.forEach((e) => (points[e.id] = 0));
+  rankings.judges.forEach((j) => {
+    j.picks.forEach((entryId, idx) => {
+      if (entryId && Object.prototype.hasOwnProperty.call(points, entryId)) points[entryId] += TURNBULL_RANK_POINTS[idx] || 0;
+    });
+  });
+  return entries
+    .map((e) => ({ entry: e, points: points[e.id] || 0 }))
+    .sort((a, b) => b.points - a.points || new Date(a.entry.submittedAt) - new Date(b.entry.submittedAt));
+}
+function turnbullSanitizePicks(rawPicks, validIds) {
+  const seen = new Set();
+  return rawPicks.map((id) => {
+    if (!id || !validIds.has(id) || seen.has(id)) return null;
+    seen.add(id);
+    return id;
+  });
+}
+
+/* ---------------- App state / router ---------------- */
+let state = { view: 'home', isAdmin: false, adminKey: null, errors: null, formValues: {}, selectedApplicationId: null, selectedTurnbullId: null, loginError: null, loadError: null };
+
+function go(view, extra) {
+  state = Object.assign(state, { view }, extra || {});
+  render();
+  window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+}
+
+// Fetches the latest applications/entries/rankings from the backend, then shows the
+// dashboard. Called on login and every time an admin returns to "All applications" —
+// several committee members may be reviewing from different computers at once.
+async function openAdminDashboard() {
+  document.getElementById('app').innerHTML = `${header({ titleLine: 'Admin Review Dashboard', adminNav: true })}<main class="wrap"><p class="loading-state">Loading latest submissions…</p></main>`;
+  try {
+    const data = await getFromBackend({ action: 'state', key: state.adminKey });
+    applications = data.applications || [];
+    applications.forEach((a) => { a.judgeScores = a.judgeScores || emptyJudgeScores(); a.scoring = scoreApplication(a); });
+    turnbullSubmissions = data.turnbullSubmissions || [];
+    if (data.turnbullRankings) turnbullRankings = data.turnbullRankings;
+    state.loadError = null;
+  } catch (err) {
+    state.loadError = 'Could not load submissions from the server (' + err.message + '). Check your connection and try again.';
+  }
+  go('adminDashboard');
+}
+
+function header(opts) {
+  opts = opts || {};
+  return `
+  <header class="site-header">
+    <div class="wrap">
+      <div class="brand">
+        <div>
+          <div class="brand-title">${opts.titleLine || 'CIM Vancouver Branch'}</div>
+          <div class="brand-sub">${opts.subLine || 'Student Awards Portal'}</div>
+        </div>
+      </div>
+      ${opts.adminNav
+        ? `<button class="admin-link" onclick="handleLogout()">Log out</button>`
+        : `<button class="admin-link" onclick="go('adminLogin')">Admin login</button>`}
+    </div>
+  </header>`;
+}
+const FOOTER = `<footer class="site-footer"><div class="wrap">CIM Vancouver Branch Student Awards Portal (Grad Studies Award + Turnbull Cup Photo Contest). Not an official CIM website. Submissions are stored on the branch's Google Sheet/Drive backend.</div></footer>`;
+const SETUP_BANNER = BACKEND_CONFIGURED ? '' : `<div class="demo-banner">Setup needed: this page's <code>BACKEND_URL</code> constant (top of the &lt;script&gt; block) still has its placeholder value, so submissions can't be saved yet. Deploy the included Apps Script backend and paste the Web App URL in — see SETUP.md.</div>`;
+
+function sel(current, value) { return current === value ? 'selected' : ''; }
+
+function departmentOptions(institution, preselect) {
+  const depts = ELIGIBLE_DEPARTMENTS[institution] || [];
+  return '<option value="">Select institution first…</option>' + depts.map((d) => `<option value="${escapeHtml(d)}" ${sel(preselect, d)}>${escapeHtml(d)}</option>`).join('');
+}
+
+function renderHome() {
+  document.getElementById('app').innerHTML = `
+    ${header()}
+    <main class="wrap">
+      ${SETUP_BANNER}
+      <section class="intro-card hero-card">
+        <h1>Welcome to the CIM Vancouver Branch Student Awards Portal</h1>
+        <p>Submit your entry for the <strong>${escapeHtml(SCHOLARSHIP.name)}</strong> or the <strong>${escapeHtml(TURNBULL_CUP.name)}</strong> here. Pick an award below to see its eligibility details and application form.</p>
+      </section>
+      <div class="program-grid">
+        <div class="program-card">
+          <div class="program-eyebrow">Graduate research award</div>
+          <h2>${escapeHtml(SCHOLARSHIP.name)}</h2>
+          <p class="blurb">${escapeHtml(SCHOLARSHIP.eligibilityText)}</p>
+          <p class="program-meta">${escapeHtml(SCHOLARSHIP.amount)} &middot; ${escapeHtml(SCHOLARSHIP.deadline)}</p>
+          <button class="btn-primary" onclick="go('apply', {formValues:{}})">Apply for the Grad Studies Award</button>
+        </div>
+        <div class="program-card">
+          <div class="program-eyebrow">Photo contest</div>
+          <h2>${escapeHtml(TURNBULL_CUP.name)}</h2>
+          <p class="blurb">${escapeHtml(TURNBULL_CUP.eligibilityText)}</p>
+          <p class="program-meta">${escapeHtml(TURNBULL_CUP.amount)} &middot; ${escapeHtml(TURNBULL_CUP.deadline)}</p>
+          <button class="btn-primary" onclick="go('turnbullApply', {formValues:{}})">Enter the Turnbull Cup</button>
+        </div>
+      </div>
+    </main>
+    ${FOOTER}
+  `;
+}
+
+function renderApply() {
+  const v = state.formValues || {};
+  const errorsHtml = state.errors && state.errors.length
+    ? `<div class="alert alert-error"><strong>Please fix the following before submitting:</strong><ul>${state.errors.map((e) => `<li>${escapeHtml(e)}</li>`).join('')}</ul></div>` : '';
+
+  document.getElementById('app').innerHTML = `
+    ${header()}
+    <main class="wrap">
+      ${SETUP_BANNER}
+      <a class="switch-program-link" href="#" onclick="go('home');return false;">&larr; Back to Student Awards Portal home</a>
+      <section class="intro-card">
+        <h1>Apply for the ${escapeHtml(SCHOLARSHIP.name)}</h1>
+        <p><strong>${escapeHtml(SCHOLARSHIP.amount)}</strong> &middot; Sponsor: ${escapeHtml(SCHOLARSHIP.sponsor)} &middot; Deadline: ${escapeHtml(SCHOLARSHIP.deadline)}</p>
+        <details class="scholarship-list" open>
+          <summary>Eligibility &amp; application package details</summary>
+          <p class="elig-text"><strong>Eligibility:</strong> ${escapeHtml(SCHOLARSHIP.eligibilityText)}</p>
+          <p class="elig-text">${escapeHtml(SCHOLARSHIP.detailedEligibilityText)}</p>
+          <p class="elig-text"><strong>Application package:</strong> ${escapeHtml(SCHOLARSHIP.applicationPackageText)}</p>
+          <p class="elig-text"><strong>Please note:</strong> ${escapeHtml(SCHOLARSHIP.studentNightText)}</p>
+        </details>
+      </section>
+      ${errorsHtml}
+      <form class="app-form" id="applyForm">
+        <fieldset>
+          <legend>Contact information</legend>
+          <label>Full Name *<input type="text" name="fullName" required value="${escapeHtml(v.fullName || '')}" /></label>
+          <div class="grid-2">
+            <label>Email *<input type="email" name="email" required value="${escapeHtml(v.email || '')}" /></label>
+            <label>Phone Number *<input type="tel" name="phone" required value="${escapeHtml(v.phone || '')}" placeholder="(604) 555-0123" /></label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Graduate program</legend>
+          <div class="grid-2">
+            <label>Institution *
+              <select name="institution" id="institution" required>
+                <option value="">Select one…</option>
+                <option value="${UBC}" ${sel(v.institution, UBC)}>${UBC}</option>
+                <option value="${SFU}" ${sel(v.institution, SFU)}>${SFU}</option>
+              </select>
+            </label>
+            <label>Department *
+              <select name="department" id="department" required>${departmentOptions(v.institution || '', v.department || '')}</select>
+            </label>
+          </div>
+          <div id="departmentOtherWrap" style="display:${v.department === OTHER_DEPARTMENT_VALUE ? 'block' : 'none'};">
+            <label>Please specify your program *
+              <input type="text" id="departmentOtherInput" name="departmentOther" value="${escapeHtml(v.departmentOther || '')}" placeholder="e.g. Environmental Engineering" ${v.department === OTHER_DEPARTMENT_VALUE ? 'required' : ''} />
+            </label>
+          </div>
+          <div class="grid-2">
+            <label>Program Type *
+              <select name="programType" required>
+                <option value="">Select one…</option>
+                ${PROGRAM_TYPES.map((p) => `<option value="${escapeHtml(p)}" ${sel(v.programType, p)}>${escapeHtml(p)}</option>`).join('')}
+              </select>
+            </label>
+            <label>Is this your first year in the graduate program? *
+              <select name="firstYearGrad" required>
+                <option value="">Select one…</option>
+                <option value="Yes" ${sel(v.firstYearGrad, 'Yes')}>Yes</option>
+                <option value="No" ${sel(v.firstYearGrad, 'No')}>No</option>
+              </select>
+            </label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Application package</legend>
+          <label>Research Summary *<input type="file" name="researchSummary" accept=".pdf,.doc,.docx" required />
+            <span class="hint">Maximum 3 pages, summarizing your current or proposed research.</span>
+          </label>
+          <label>Resume *<input type="file" name="resume" accept=".pdf,.doc,.docx" required />
+            <span class="hint">One page, including contact information.</span>
+          </label>
+          <label>Cover Letter *<input type="file" name="coverLetter" accept=".pdf,.doc,.docx" required />
+            <span class="hint">A brief letter introducing yourself and your interest in the award.</span>
+          </label>
+          <label>Proof of Enrollment *<input type="file" name="proofOfEnrollment" accept=".pdf,.doc,.docx" required />
+            <span class="hint">Documentation verifying full-time registration as a first-year graduate student.</span>
+          </label>
+          <p class="hint">Accepted formats: PDF, DOC, DOCX.</p>
+        </fieldset>
+        <button type="submit" class="btn-primary" id="applySubmitBtn">Submit Application</button>
+      </form>
+    </main>
+    ${FOOTER}
+  `;
+
+  const institutionSelect = document.getElementById('institution');
+  const departmentSelect = document.getElementById('department');
+  function toggleDepartmentOther() {
+    const wrap = document.getElementById('departmentOtherWrap');
+    const otherInput = document.getElementById('departmentOtherInput');
+    const isOther = departmentSelect.value === OTHER_DEPARTMENT_VALUE;
+    wrap.style.display = isOther ? 'block' : 'none';
+    otherInput.required = isOther;
+  }
+  institutionSelect.addEventListener('change', function () {
+    departmentSelect.innerHTML = departmentOptions(institutionSelect.value, '');
+    toggleDepartmentOther();
+  });
+  departmentSelect.addEventListener('change', toggleDepartmentOther);
+
+  document.getElementById('applyForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    const values = {};
+    for (const [k, val] of fd.entries()) values[k] = val;
+
+    const required = ['fullName', 'email', 'phone', 'institution', 'department', 'programType', 'firstYearGrad'];
+    const errors = [];
+    required.forEach((f) => { if (!values[f] || !String(values[f]).trim()) errors.push('Missing required field: ' + f); });
+    if (values.department === OTHER_DEPARTMENT_VALUE && (!values.departmentOther || !String(values.departmentOther).trim())) {
+      errors.push('Please specify your program when selecting "Other (please specify)".');
+    }
+
+    const researchSummaryInput = e.target.querySelector('input[name="researchSummary"]');
+    const resumeInput = e.target.querySelector('input[name="resume"]');
+    const coverLetterInput = e.target.querySelector('input[name="coverLetter"]');
+    const proofInput = e.target.querySelector('input[name="proofOfEnrollment"]');
+    if (!researchSummaryInput.files[0]) errors.push('Research Summary upload is required.');
+    if (!resumeInput.files[0]) errors.push('Resume upload is required.');
+    if (!coverLetterInput.files[0]) errors.push('Cover Letter upload is required.');
+    if (!proofInput.files[0]) errors.push('Proof of Enrollment upload is required.');
+
+    if (errors.length) { state.errors = errors; state.formValues = values; render(); return; }
+
+    if (!BACKEND_CONFIGURED) { state.errors = ['The site owner still needs to finish setup (BACKEND_URL is not configured yet) — see the notice above.']; state.formValues = values; render(); return; }
+
+    const btn = document.getElementById('applySubmitBtn');
+    btn.disabled = true; btn.textContent = 'Submitting…';
+    try {
+      const [researchSummaryDataUrl, resumeDataUrl, coverLetterDataUrl, proofOfEnrollmentDataUrl] = await Promise.all([
+        readFileAsDataUrl(researchSummaryInput.files[0]),
+        readFileAsDataUrl(resumeInput.files[0]),
+        readFileAsDataUrl(coverLetterInput.files[0]),
+        readFileAsDataUrl(proofInput.files[0]),
+      ]);
+      const application = {
+        id: uid(), submittedAt: new Date().toISOString(),
+        fullName: values.fullName.trim(), email: values.email.trim(), phone: values.phone.trim(),
+        institution: values.institution, department: values.department,
+        departmentOther: values.department === OTHER_DEPARTMENT_VALUE ? String(values.departmentOther || '').trim() : '',
+        programType: values.programType,
+        firstYearGrad: values.firstYearGrad,
+        resumeFileName: resumeInput.files[0].name, researchSummaryFileName: researchSummaryInput.files[0].name,
+        coverLetterFileName: coverLetterInput.files[0].name, proofOfEnrollmentFileName: proofInput.files[0].name,
+        researchSummaryDataUrl, resumeDataUrl, coverLetterDataUrl, proofOfEnrollmentDataUrl,
+        judgeScores: emptyJudgeScores(),
+      };
+      const data = await postToBackend({ action: 'submitGradApplication', application });
+      const saved = data.application;
+      saved.scoring = scoreApplication(saved);
+      state.errors = null; state.formValues = {};
+      go('success', { lastApplication: saved });
+    } catch (err) {
+      state.errors = ['Could not submit your application: ' + err.message + '. Please try again.'];
+      state.formValues = values;
+      render();
+    }
+  });
+}
+
+function renderSuccess() {
+  const application = state.lastApplication;
+  const best = application.scoring.best;
+  document.getElementById('app').innerHTML = `
+    ${header()}
+    <main class="wrap">
+      ${SETUP_BANNER}
+      <section class="intro-card success-card">
+        <h1>&#10003; Application received</h1>
+        <p>Thank you, <strong>${escapeHtml(application.fullName)}</strong> — your application for the <strong>${escapeHtml(SCHOLARSHIP.name)}</strong> has been recorded.</p>
+        <p class="hint">Eligibility check: <strong>${best.metCount}/${best.totalCount} criteria met (${best.percentage}%)</strong> — ${application.scoring.meetsAllCriteria ? 'meets all eligibility criteria.' : 'does not yet meet all eligibility criteria.'}</p>
+        <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+          <button class="btn-primary" onclick="go('apply', {formValues:{}})">Submit another application</button>
+          <button class="btn-secondary" onclick="go('home')">Back to home</button>
+        </div>
+      </section>
+    </main>
+    ${FOOTER}
+  `;
+}
+
+function renderTurnbullApply() {
+  const v = state.formValues || {};
+  const errorsHtml = state.errors && state.errors.length
+    ? `<div class="alert alert-error"><strong>Please fix the following before submitting:</strong><ul>${state.errors.map((e) => `<li>${escapeHtml(e)}</li>`).join('')}</ul></div>` : '';
+  const rulesHtml = TURNBULL_CUP.rules.map((r) => `<li>${escapeHtml(r)}</li>`).join('');
+
+  document.getElementById('app').innerHTML = `
+    ${header()}
+    <main class="wrap">
+      ${SETUP_BANNER}
+      <a class="switch-program-link" href="#" onclick="go('home');return false;">&larr; Back to Student Awards Portal home</a>
+      <section class="intro-card">
+        <h1>Enter the ${escapeHtml(TURNBULL_CUP.name)}</h1>
+        <p><strong>${escapeHtml(TURNBULL_CUP.amount)}</strong> &middot; Sponsor: ${escapeHtml(TURNBULL_CUP.sponsor)}</p>
+        <details class="scholarship-list" open>
+          <summary>Eligibility, prizes, rules &amp; contact</summary>
+          <p class="elig-text"><strong>Eligibility:</strong> ${escapeHtml(TURNBULL_CUP.eligibilityText)}</p>
+          <p class="elig-text"><strong>Prizes:</strong> ${escapeHtml(TURNBULL_CUP.prizesText)}</p>
+          <p class="elig-text"><strong>Rules:</strong></p>
+          <ul class="rules-list">${rulesHtml}</ul>
+          <p class="elig-text"><strong>Contact:</strong> <a href="mailto:${escapeHtml(TURNBULL_CUP.contactEmail)}">${escapeHtml(TURNBULL_CUP.contactEmail)}</a></p>
+        </details>
+      </section>
+      ${errorsHtml}
+      <form class="app-form" id="turnbullForm">
+        <fieldset>
+          <p class="step-heading">Step 1 &mdash; Your details</p>
+          <label>Your name *<input type="text" name="fullName" required value="${escapeHtml(v.fullName || '')}" /></label>
+          <label>Your email *<input type="email" name="email" required value="${escapeHtml(v.email || '')}" /></label>
+          <label>Your school/department *
+            <select name="school" required>
+              <option value="">Select one…</option>
+              ${TURNBULL_CUP.schoolOptions.map((s) => `<option value="${escapeHtml(s)}" ${sel(v.school, s)}>${escapeHtml(s)}</option>`).join('')}
+            </select>
+          </label>
+          <label>Description of photo *
+            <textarea name="photoDescription" rows="3" required placeholder="Briefly describe the photo — this will be used as its caption if selected for judging or publication.">${escapeHtml(v.photoDescription || '')}</textarea>
+          </label>
+          <label>Name of mine, property, location or plant *<input type="text" name="location" required value="${escapeHtml(v.location || '')}" /></label>
+          <label>Country (and province/state, if applicable) *<input type="text" name="country" required value="${escapeHtml(v.country || '')}" placeholder="e.g. Canada (British Columbia)" /></label>
+        </fieldset>
+        <fieldset>
+          <p class="step-heading">Step 2 &mdash; Upload photo</p>
+          <label>Photo (JPG) *<input type="file" name="photo" accept=".jpg,.jpeg,image/jpeg" required /></label>
+          <p class="hint">High quality JPG, ideally &gt;85% quality, no more than 2.5MB in size, and at least 1024&times;768 pixels.</p>
+        </fieldset>
+        <button type="submit" class="btn-primary" id="turnbullSubmitBtn">Submit Entry</button>
+      </form>
+    </main>
+    ${FOOTER}
+  `;
+
+  document.getElementById('turnbullForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    const values = {};
+    for (const [k, val] of fd.entries()) values[k] = val;
+
+    const required = ['fullName', 'email', 'school', 'photoDescription', 'location', 'country'];
+    const errors = [];
+    required.forEach((f) => { if (!values[f] || !String(values[f]).trim()) errors.push('Missing required field: ' + f); });
+
+    const photoInput = e.target.querySelector('input[name="photo"]');
+    const file = photoInput.files[0];
+    if (!file) errors.push('Photo upload is required.');
+
+    async function finish(photoDataUrl) {
+      if (errors.length) { state.errors = errors; state.formValues = values; render(); return; }
+      if (!BACKEND_CONFIGURED) { state.errors = ['The site owner still needs to finish setup (BACKEND_URL is not configured yet) — see the notice above.']; state.formValues = values; render(); return; }
+
+      const submission = {
+        id: uid(), submittedAt: new Date().toISOString(),
+        fullName: values.fullName.trim(), email: values.email.trim(), school: values.school,
+        photoDescription: values.photoDescription.trim(), location: values.location.trim(), country: values.country.trim(),
+        photoFileName: file.name, photoDataUrl: photoDataUrl,
+      };
+      const btn = document.getElementById('turnbullSubmitBtn');
+      btn.disabled = true; btn.textContent = 'Submitting…';
+      try {
+        const data = await postToBackend({ action: 'submitTurnbullEntry', submission });
+        state.errors = null; state.formValues = {};
+        go('turnbullSuccess', { lastSubmission: data.submission });
+      } catch (err) {
+        state.errors = ['Could not submit your entry: ' + err.message + '. Please try again.'];
+        state.formValues = values;
+        render();
+      }
+    }
+
+    if (!file) { finish(null); return; }
+    if (file.size > TURNBULL_CUP.photo.maxBytes) errors.push('Photo must be no more than 2.5MB (received ' + (file.size / (1024 * 1024)).toFixed(2) + 'MB).');
+    if (!/\.jpe?g$/i.test(file.name)) errors.push('Photo must be a JPG file.');
+
+    const reader = new FileReader();
+    reader.onload = function () {
+      const img = new Image();
+      img.onload = function () {
+        if (img.naturalWidth < TURNBULL_CUP.photo.minWidth || img.naturalHeight < TURNBULL_CUP.photo.minHeight) {
+          errors.push('Photo must be at least 1024x768 pixels (received ' + img.naturalWidth + 'x' + img.naturalHeight + ').');
+        }
+        finish(reader.result);
+      };
+      img.onerror = function () { finish(reader.result); };
+      img.src = reader.result;
+    };
+    reader.onerror = function () { finish(null); };
+    reader.readAsDataURL(file);
+  });
+}
+
+function renderTurnbullSuccess() {
+  const submission = state.lastSubmission;
+  document.getElementById('app').innerHTML = `
+    ${header()}
+    <main class="wrap">
+      ${SETUP_BANNER}
+      <section class="intro-card success-card">
+        <h1>&#10003; Entry received</h1>
+        <p>Thank you, <strong>${escapeHtml(submission.fullName)}</strong> — your entry for the <strong>${escapeHtml(TURNBULL_CUP.name)}</strong> has been recorded.</p>
+        <p class="hint">Judging will be done by the CIM Vancouver Branch Executive Committee. ${escapeHtml(TURNBULL_CUP.studentNightText)}</p>
+        <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+          <button class="btn-primary" onclick="go('turnbullApply', {formValues:{}})">Submit another entry</button>
+          <button class="btn-secondary" onclick="go('home')">Back to home</button>
+        </div>
+      </section>
+    </main>
+    ${FOOTER}
+  `;
+}
+
+function renderAdminLogin() {
+  document.getElementById('app').innerHTML = `
+    ${header()}
+    <main class="wrap">
+      ${SETUP_BANNER}
+      <div class="login-body-wrap">
+        <div class="login-card">
+          <div class="brand brand-center">
+            <div><div class="brand-title">Admin Review Portal</div><div class="brand-sub">CIM Vancouver Branch — Student Awards</div></div>
+          </div>
+          ${state.loginError ? `<div class="alert alert-error">${escapeHtml(state.loginError)}</div>` : ''}
+          <form id="loginForm">
+            <label>Username<input type="text" name="username" autocomplete="username" required /></label>
+            <label>Password<input type="password" name="password" autocomplete="current-password" required /></label>
+            <button type="submit" class="btn-primary btn-block">Log In</button>
+          </form>
+          <p class="hint center"><a href="#" onclick="go('home');return false;">&larr; Back to home</a></p>
+        </div>
+      </div>
+    </main>
+    ${FOOTER}
+  `;
+  document.getElementById('loginForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    const attemptHash = await sha256Hex(`${fd.get('username')}:${fd.get('password')}`);
+    if (attemptHash === ADMIN_CREDENTIAL_HASH) {
+      state.isAdmin = true; state.adminKey = attemptHash; state.loginError = null;
+      await openAdminDashboard();
+    } else {
+      state.loginError = 'Invalid username or password.';
+      render();
+    }
+  });
+}
+
+function handleLogout() { state.isAdmin = false; state.adminKey = null; go('home'); }
+
+function requireAdminOrRedirect() {
+  if (!state.isAdmin) { go('adminLogin'); return false; }
+  return true;
+}
+
+function criterionMet(app, criterionId) {
+  const best = app.scoring && app.scoring.best;
+  const c = best && best.criteriaResults.find((x) => x.id === criterionId);
+  return !!(c && c.met);
+}
+function critIcon(met) { return met ? `<span class="crit-yes">&#10003; Yes</span>` : `<span class="crit-no">&#10007; No</span>`; }
+function totalScoreCell(app) {
+  const total = grandTotal(app.judgeScores);
+  return total === null ? `<span class="hint">Not yet scored</span>` : `<strong>${total}</strong> <span class="hint">/ ${MAX_GRAND_TOTAL}</span>`;
+}
+
+function applicantRow(app, i) {
+  return `
+    <tr>
+      <td class="rank-cell" data-label="#">#${i + 1}</td>
+      <td data-label="Applicant">${escapeHtml(app.fullName)}<br /><span class="hint">${escapeHtml(app.email)}</span></td>
+      <td data-label="Graduate Student Criteria">${critIcon(criterionMet(app, 'phd-or-thesis-masters'))}</td>
+      <td data-label="First-Year Criteria">${critIcon(criterionMet(app, 'first-year-grad'))}</td>
+      <td data-label="UBC/SFU Criteria">${critIcon(criterionMet(app, 'eligible-institution-department'))}</td>
+      <td data-label="Judges' Total Score">${totalScoreCell(app)}</td>
+      <td class="hint" data-label="Submitted">${new Date(app.submittedAt).toLocaleDateString()}</td>
+      <td data-label="" class="view-cell"><button class="btn-secondary btn-small" onclick="go('adminApplication', {selectedApplicationId:'${app.id}'})">View</button></td>
+    </tr>`;
+}
+
+function applicantTable(list) {
+  if (!list.length) return `<p class="empty-state">No applications in this category yet.</p>`;
+  const rows = list.map((app, i) => applicantRow(app, i)).join('');
+  return `<table class="rank-table"><thead><tr><th>#</th><th>Applicant</th><th>Graduate Student Criteria</th><th>First-Year Criteria</th><th>UBC/SFU Criteria</th><th>Judges' Total Score</th><th>Submitted</th><th></th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+function turnbullRow(sub, i) {
+  const fileId = sub.photoFile && sub.photoFile.fileId;
+  return `
+    <tr>
+      <td class="rank-cell" data-label="#">#${i + 1}</td>
+      <td class="thumb-cell" data-label="Photo"><a href="#" onclick="go('adminTurnbullEntry', {selectedTurnbullId:'${sub.id}'});return false;"><img class="photo-thumb" src="${driveThumb(fileId, 200)}" alt="Thumbnail of ${escapeHtml(sub.fullName)}'s submission" /></a></td>
+      <td data-label="Photographer">${escapeHtml(sub.fullName)}<br /><span class="hint">${escapeHtml(sub.email)}</span></td>
+      <td data-label="School/Department">${escapeHtml(sub.school)}</td>
+      <td data-label="Location">${escapeHtml(sub.location)}<br /><span class="hint">${escapeHtml(sub.country)}</span></td>
+      <td class="hint" data-label="Submitted">${new Date(sub.submittedAt).toLocaleDateString()}</td>
+      <td data-label="" class="view-cell"><button class="btn-secondary btn-small" onclick="go('adminTurnbullEntry', {selectedTurnbullId:'${sub.id}'})">View</button></td>
+    </tr>`;
+}
+
+function turnbullTable(list) {
+  if (!list.length) return `<p class="empty-state">No entries submitted yet.</p>`;
+  const rows = list.map((sub, i) => turnbullRow(sub, i)).join('');
+  return `<table class="rank-table turnbull-table"><thead><tr><th>#</th><th>Photo</th><th>Photographer</th><th>School/Department</th><th>Location</th><th>Submitted</th><th></th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+function turnbullLeaderboardTable(leaderboard) {
+  if (!leaderboard.length) return `<p class="empty-state">No entries to rank yet.</p>`;
+  const rows = leaderboard.map((row, i) => {
+    const fileId = row.entry.photoFile && row.entry.photoFile.fileId;
+    return `
+    <tr>
+      <td class="rank-cell" data-label="#">#${i + 1}</td>
+      <td class="thumb-cell" data-label="Photo"><a href="#" onclick="go('adminTurnbullEntry', {selectedTurnbullId:'${row.entry.id}'});return false;"><img class="photo-thumb" src="${driveThumb(fileId, 200)}" alt="Thumbnail of ${escapeHtml(row.entry.fullName)}'s submission" /></a></td>
+      <td data-label="Photographer">${escapeHtml(row.entry.fullName)}<br /><span class="hint">${escapeHtml(row.entry.school)}</span></td>
+      <td data-label="Points">${row.points > 0 ? `<strong>${row.points}</strong> <span class="hint">pts</span>` : `<span class="hint">No picks yet</span>`}</td>
+      <td data-label="" class="view-cell"><button class="btn-secondary btn-small" onclick="go('adminTurnbullEntry', {selectedTurnbullId:'${row.entry.id}'})">View</button></td>
+    </tr>`;
+  }).join('');
+  return `<table class="rank-table turnbull-table"><thead><tr><th>#</th><th>Photo</th><th>Photographer</th><th>Points</th><th></th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+function rankSelect(judgeId, rankIdx, entries, currentEntryId) {
+  const options = entries.map((e) => `<option value="${e.id}" ${e.id === currentEntryId ? 'selected' : ''}>${escapeHtml(e.fullName)}</option>`).join('');
+  return `<select name="${judgeId}_rank${rankIdx}" class="rank-select"><option value="">&mdash;</option>${options}</select>`;
+}
+
+function turnbullRankingsForm(rankings, entries) {
+  if (!entries.length) {
+    return `<section class="intro-card" id="turnbull-rankings"><h2>Judges' rankings</h2><p class="hint">No entries submitted yet — rankings will be available once entries come in.</p></section>`;
+  }
+  const rows = rankings.judges.map((j) => {
+    const rankCells = Array.from({ length: TURNBULL_RANK_SLOTS }, (_, i) => `<td>${rankSelect(j.id, i + 1, entries, j.picks[i])}</td>`).join('');
+    return `<tr><td class="judge-label">${escapeHtml(j.label)}${judgeNameInput(j, j.name)}</td>${rankCells}</tr>`;
+  }).join('');
+  const rankHeaders = Array.from({ length: TURNBULL_RANK_SLOTS }, (_, i) => `<th>Rank ${i + 1}${i === 0 ? ' (best)' : ''}</th>`).join('');
+  return `
+    <section class="intro-card" id="turnbull-rankings">
+      <h2>Judges' rankings</h2>
+      <p class="hint">Each of the ${TURNBULL_JUDGE_COUNT} panel judges can add their name and pick their top ${TURNBULL_RANK_SLOTS} favourite entries, ranked 1 (best) through ${TURNBULL_RANK_SLOTS}. Points (${TURNBULL_RANK_POINTS.join('/')}) are tallied automatically into the leaderboard above.</p>
+      <form id="turnbullRankingsForm">
+        <div class="table-scroll">
+          <table class="scoring-table">
+            <thead><tr><th>Judge</th>${rankHeaders}</tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+        <button type="submit" class="btn-primary" id="turnbullRankingsSaveBtn" style="margin-top:16px;">Save Rankings</button>
+      </form>
+    </section>`;
+}
+
+function renderAdminDashboard() {
+  if (!requireAdminOrRedirect()) return;
+  const { eligible, notEligible } = splitByEligibility(applications);
+  const legend = SCHOLARSHIP.criteria.map((c) => `<li>${escapeHtml(c.label)}</li>`).join('');
+  const leaderboard = turnbullComputeLeaderboard(turnbullSubmissions, turnbullRankings);
+  const loadErrorHtml = state.loadError ? `<div class="alert alert-error">${escapeHtml(state.loadError)}</div>` : '';
+
+  document.getElementById('app').innerHTML = `
+    ${header({ titleLine: 'Admin Review Dashboard', adminNav: true })}
+    <main class="wrap">
+      ${SETUP_BANNER}
+      ${loadErrorHtml}
+      <section class="intro-card">
+        <h1>${escapeHtml(SCHOLARSHIP.name)} — Applications</h1>
+        <p class="hint">${escapeHtml(SCHOLARSHIP.amount)} &middot; Sponsor: ${escapeHtml(SCHOLARSHIP.sponsor)} &middot; Deadline: ${escapeHtml(SCHOLARSHIP.deadline)}</p>
+        <p>Every application is automatically checked against the three eligibility criteria below and split into two lists — eligible applicants are prioritized for review.</p>
+        <ul class="criteria-legend">${legend}</ul>
+        <p class="hint">${eligible.length} meets eligibility criteria &middot; ${notEligible.length} does not meet eligibility criteria</p>
+        <div style="margin-top:14px; display:flex; gap:10px;">
+          <button class="btn-secondary btn-small" onclick="go('home')">&larr; Back to home</button>
+          <button class="btn-secondary btn-small" onclick="openAdminDashboard()">&#8635; Refresh</button>
+        </div>
+      </section>
+      <div class="dashboard-section">
+        <span class="section-heading section-heading-eligible">&#10003; Meets Eligibility Criteria — Prioritized (${eligible.length})</span>
+        ${applicantTable(eligible)}
+      </div>
+      <div class="dashboard-section">
+        <span class="section-heading section-heading-ineligible">Does Not Meet Eligibility Criteria (${notEligible.length})</span>
+        ${applicantTable(notEligible)}
+      </div>
+
+      <section class="intro-card" style="margin-top:40px;">
+        <h1>${escapeHtml(TURNBULL_CUP.name)} — Entries</h1>
+        <p class="hint">${escapeHtml(TURNBULL_CUP.amount)} &middot; Sponsor: ${escapeHtml(TURNBULL_CUP.sponsor)} &middot; ${escapeHtml(TURNBULL_CUP.deadline)}</p>
+        <p>Judged manually by the CIM Vancouver Branch Executive Committee — this section lists every entry received, separate from the Grad Studies Award applications above.</p>
+        <p class="hint">${turnbullSubmissions.length} entr${turnbullSubmissions.length === 1 ? 'y' : 'ies'} submitted</p>
+      </section>
+      <div class="dashboard-section">
+        ${turnbullTable(turnbullSubmissions)}
+      </div>
+
+      <section class="intro-card" style="margin-top:40px;">
+        <h1>Turnbull Cup — Leaderboard</h1>
+        <p>Ranked by points from the judges' rankings tool below (5 points for a judge's #1 pick down to 1 point for their #5 pick).</p>
+      </section>
+      <div class="dashboard-section">
+        ${turnbullLeaderboardTable(leaderboard)}
+      </div>
+      <div class="dashboard-section">
+        ${turnbullRankingsForm(turnbullRankings, turnbullSubmissions)}
+      </div>
+    </main>
+  `;
+
+  const rankingsForm = document.getElementById('turnbullRankingsForm');
+  if (rankingsForm) {
+    rankingsForm.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const validIds = new Set(turnbullSubmissions.map((s) => s.id));
+      const updatedJudges = turnbullRankings.judges.map((j) => {
+        const name = String(fd.get(j.id + '_name') || '').trim();
+        const rawPicks = Array.from({ length: TURNBULL_RANK_SLOTS }, (_, i) => {
+          const val = fd.get(j.id + '_rank' + (i + 1));
+          return val ? String(val) : null;
+        });
+        return { id: j.id, label: j.label, name, picks: turnbullSanitizePicks(rawPicks, validIds) };
+      });
+      const btn = document.getElementById('turnbullRankingsSaveBtn');
+      btn.disabled = true; btn.textContent = 'Saving…';
+      try {
+        await postToBackend({ action: 'saveTurnbullRankings', key: state.adminKey, rankings: { judges: updatedJudges } });
+        turnbullRankings = { judges: updatedJudges };
+        state.loadError = null;
+        render();
+      } catch (err) {
+        state.loadError = 'Could not save rankings: ' + err.message;
+        render();
+      }
+    });
+  }
+}
+
+function renderAdminTurnbullEntry() {
+  if (!requireAdminOrRedirect()) return;
+  const submission = turnbullSubmissions.find((s) => s.id === state.selectedTurnbullId);
+  const fileId = submission.photoFile && submission.photoFile.fileId;
+  document.getElementById('app').innerHTML = `
+    ${header({ titleLine: 'Admin Review Dashboard', adminNav: true })}
+    <main class="wrap">
+      <p><a href="#" onclick="go('adminDashboard');return false;">&larr; All applications</a></p>
+      <section class="intro-card">
+        <h1>${escapeHtml(submission.fullName)}</h1>
+        <p class="hint">Entry for the ${escapeHtml(TURNBULL_CUP.name)}</p>
+        <img class="photo-preview-large" src="${driveThumb(fileId, 1600)}" alt="Photo submitted by ${escapeHtml(submission.fullName)}" />
+        <div class="detail-grid">
+          <div><span class="hint">Email</span><br />${escapeHtml(submission.email)}</div>
+          <div><span class="hint">School/Department</span><br />${escapeHtml(submission.school)}</div>
+          <div><span class="hint">Location</span><br />${escapeHtml(submission.location)}</div>
+          <div><span class="hint">Country</span><br />${escapeHtml(submission.country)}</div>
+          <div><span class="hint">Submitted</span><br />${new Date(submission.submittedAt).toLocaleString()}</div>
+        </div>
+        <div class="text-block">
+          <span class="hint">Description of photo</span>
+          <p>${escapeHtml(submission.photoDescription)}</p>
+        </div>
+        <div class="doc-links">
+          <a class="btn-secondary" href="${escapeHtml(driveFileUrl(submission.photoFile))}" target="_blank" rel="noopener">&#128196; Open original file: ${escapeHtml(submission.photoFileName)}</a>
+        </div>
+      </section>
+    </main>
+  `;
+}
+
+function scoreInput(rowId, dim, currentValue) {
+  const val = (currentValue === null || currentValue === undefined) ? '' : currentValue;
+  return `<input type="number" min="${MIN_SCORE}" max="${MAX_SCORE}" step="1" name="${rowId}_${dim.id}" value="${val}" class="score-input" />`;
+}
+
+function judgeNameInput(judge, currentName) {
+  return `<input type="text" name="${judge.id}_name" value="${escapeHtml(currentName || '')}" placeholder="Evaluator name" class="judge-name-input" />`;
+}
+
+function judgingRubricSection(application) {
+  const rows = JUDGES.map((j) => {
+    const row = application.judgeScores[j.id] || emptyRow('judge');
+    const cells = DIMENSIONS.map((d) => `<td>${scoreInput(j.id, d, row[d.id])}</td>`).join('');
+    const total = rowTotal(row);
+    return `<tr><td class="judge-label">${escapeHtml(j.label)}${judgeNameInput(j, row.name)}</td>${cells}<td class="row-total">${total === null ? '—' : total}</td></tr>`;
+  }).join('');
+  const aiRowData = application.judgeScores[AI_ROW.id] || emptyRow('ai');
+  const aiCells = DIMENSIONS.map((d) => `<td>${scoreInput(AI_ROW.id, d, aiRowData[d.id])}</td>`).join('');
+  const aiTotal = rowTotal(aiRowData);
+  const grand = grandTotal(application.judgeScores);
+
+  return `
+    <section class="intro-card">
+      <h2>Judging rubric</h2>
+      <p class="hint">Each of the ${JUDGES.length} panel judges can add their name and scores the application 0–10 on four dimensions. The grand total reflects only the named judges.</p>
+      <form id="scoresForm">
+        <div class="table-scroll">
+          <table class="scoring-table">
+            <thead><tr><th>Evaluator</th>${DIMENSIONS.map((d) => `<th>${escapeHtml(d.label)}</th>`).join('')}<th>Row Total</th></tr></thead>
+            <tbody>
+              ${rows}
+              <tr class="ai-row"><td class="judge-label">${escapeHtml(AI_ROW.label)}</td>${aiCells}<td class="row-total">${aiTotal === null ? '—' : aiTotal}</td></tr>
+            </tbody>
+            <tfoot><tr><td colspan="${DIMENSIONS.length + 1}">Grand Total (named judges only)</td><td class="grand-total">${grand === null ? 'Incomplete' : grand + ' / ' + MAX_GRAND_TOTAL}</td></tr></tfoot>
+          </table>
+        </div>
+        <label class="ai-notes-label">AI reasoning (optional, editable)
+          <textarea name="ai_notes" rows="3" class="ai-notes-textarea" placeholder="Short rationale behind the AI preliminary read...">${escapeHtml(aiRowData.notes || '')}</textarea>
+        </label>
+        <p class="hint ai-disclaimer">The "${escapeHtml(AI_ROW.label)}" row is an optional, preliminary AI-assisted read entered by whoever processes the application — it does <strong>not</strong> carry the subject-matter expertise of the panel judges, is not a substitute for expert review, and is excluded from the judges' grand total above. Treat it as a rough first impression only.</p>
+        <button type="submit" class="btn-primary" id="scoresSaveBtn">Save Scores</button>
+      </form>
+    </section>`;
+}
+
+function renderAdminApplication() {
+  if (!requireAdminOrRedirect()) return;
+  const application = applications.find((a) => a.id === state.selectedApplicationId);
+  const best = application.scoring.best;
+  const banner = application.scoring.meetsAllCriteria
+    ? `<div class="alert alert-success">Meets all eligibility criteria for the ${escapeHtml(SCHOLARSHIP.name)}.</div>`
+    : `<div class="alert alert-warning">Does not currently meet all eligibility criteria for the ${escapeHtml(SCHOLARSHIP.name)} — see the breakdown below.</div>`;
+  const checklist = best.criteriaResults.map((c) => `<li class="${c.met ? 'met' : 'unmet'}">${c.met ? '&#10003;' : '&#10007;'} ${escapeHtml(c.label)}</li>`).join('');
+  const departmentDisplay = application.department === OTHER_DEPARTMENT_VALUE && application.departmentOther
+    ? `${application.department} — ${application.departmentOther}`
+    : application.department;
+  const docLink = (fileMeta, label) => fileMeta && fileMeta.url
+    ? `<a class="btn-secondary" href="${escapeHtml(fileMeta.url)}" target="_blank" rel="noopener">&#128196; ${escapeHtml(label)}</a>`
+    : `<span class="btn-secondary" style="cursor:default;">&#128196; ${escapeHtml(label)} (file not available)</span>`;
+
+  document.getElementById('app').innerHTML = `
+    ${header({ titleLine: 'Admin Review Dashboard', adminNav: true })}
+    <main class="wrap">
+      <p><a href="#" onclick="go('adminDashboard');return false;">&larr; All applications</a></p>
+      ${banner}
+      <section class="intro-card">
+        <h1>${escapeHtml(application.fullName)}</h1>
+        <div class="detail-grid">
+          <div><span class="hint">Email</span><br />${escapeHtml(application.email)}</div>
+          <div><span class="hint">Phone</span><br />${escapeHtml(application.phone)}</div>
+          <div><span class="hint">Institution</span><br />${escapeHtml(application.institution)}</div>
+          <div><span class="hint">Department</span><br />${escapeHtml(departmentDisplay)}</div>
+          <div><span class="hint">Program Type</span><br />${escapeHtml(application.programType)}</div>
+          <div><span class="hint">First-Year Graduate Student?</span><br />${escapeHtml(application.firstYearGrad)}</div>
+          <div><span class="hint">Submitted</span><br />${new Date(application.submittedAt).toLocaleString()}</div>
+        </div>
+        <div class="doc-links">
+          ${docLink(application.researchSummaryFile, 'Research Summary: ' + application.researchSummaryFileName)}
+          ${docLink(application.resumeFile, 'Resume: ' + application.resumeFileName)}
+          ${docLink(application.coverLetterFile, 'Cover Letter: ' + application.coverLetterFileName)}
+          ${docLink(application.proofOfEnrollmentFile, 'Proof of Enrollment: ' + application.proofOfEnrollmentFileName)}
+        </div>
+        <div class="text-block">
+          <span class="hint">Eligibility criteria breakdown — ${best.metCount}/${best.totalCount} criteria met (${best.percentage}%)</span>
+          <ul class="criteria-checklist">${checklist}</ul>
+        </div>
+      </section>
+      ${judgingRubricSection(application)}
+    </main>
+  `;
+
+  document.getElementById('scoresForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    const judgeScores = application.judgeScores || emptyJudgeScores();
+    JUDGES.forEach((j) => {
+      const row = judgeScores[j.id] || {};
+      row.name = String(fd.get(j.id + '_name') || '').trim();
+      DIMENSIONS.forEach((d) => { row[d.id] = parseScoreValue(fd.get(j.id + '_' + d.id)); });
+      judgeScores[j.id] = row;
+    });
+    const aiRowData = judgeScores[AI_ROW.id] || {};
+    aiRowData.notes = String(fd.get('ai_notes') || '').trim();
+    DIMENSIONS.forEach((d) => { aiRowData[d.id] = parseScoreValue(fd.get(AI_ROW.id + '_' + d.id)); });
+    judgeScores[AI_ROW.id] = aiRowData;
+
+    const btn = document.getElementById('scoresSaveBtn');
+    btn.disabled = true; btn.textContent = 'Saving…';
+    try {
+      await postToBackend({ action: 'saveJudgeScores', key: state.adminKey, applicationId: application.id, judgeScores });
+      application.judgeScores = judgeScores;
+      render();
+    } catch (err) {
+      btn.disabled = false; btn.textContent = 'Save Scores';
+      alert('Could not save scores: ' + err.message + '. Please try again.');
+    }
+  });
+}
+
+function render() {
+  state.errors = (state.view === 'apply' || state.view === 'turnbullApply') ? state.errors : null;
+  if (state.view === 'home') return renderHome();
+  if (state.view === 'apply') return renderApply();
+  if (state.view === 'success') return renderSuccess();
+  if (state.view === 'turnbullApply') return renderTurnbullApply();
+  if (state.view === 'turnbullSuccess') return renderTurnbullSuccess();
+  if (state.view === 'adminLogin') return renderAdminLogin();
+  if (state.view === 'adminDashboard') return renderAdminDashboard();
+  if (state.view === 'adminApplication') return renderAdminApplication();
+  if (state.view === 'adminTurnbullEntry') return renderAdminTurnbullEntry();
+}
+
+render();
+</script>
+</body>
+</html>
