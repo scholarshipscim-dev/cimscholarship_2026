@@ -20,8 +20,8 @@ body { margin: 0; background: var(--bg); color: var(--text); line-height: 1.5; }
 .brand-center { justify-content: center; margin-bottom: 20px; }
 .brand-title { font-weight: 700; font-size: 16px; }
 .brand-sub { font-size: 12px; color: #c7d3e0; }
-.admin-link { color: #fff; opacity: 0.85; text-decoration: none; font-size: 14px; cursor: pointer; background: none; border: none; }
-.admin-link:hover { opacity: 1; text-decoration: underline; }
+.admin-link { color: var(--navy); opacity: 1; text-decoration: none; font-size: 14px; cursor: pointer; background: none; border: none; }
+.admin-link:hover { color: rgba(255,255,255,0.55); text-decoration: underline; }
 main.wrap { padding-top: 28px; padding-bottom: 60px; }
 .intro-card, .login-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 24px 28px; margin-bottom: 24px; }
 h1 { font-size: 22px; margin: 0 0 10px; color: var(--navy); }
@@ -55,17 +55,9 @@ h2 { font-size: 18px; color: var(--navy); }
 .btn-small { padding: 5px 10px; font-size: 12px; }
 .site-footer { padding: 20px 0 40px; color: var(--hint); font-size: 12px; }
 .login-body-wrap { display: flex; align-items: center; justify-content: center; min-height: 70vh; background: linear-gradient(160deg, var(--navy), var(--navy-light)); border-radius: 12px; padding: 40px 20px; }
-.login-card { width: 360px; background: transparent; border-color: rgba(255,255,255,0.16); box-shadow: none; }
-.login-card .brand-title { color: #fff; }
-.login-card .brand-sub { color: #c7d3e0; }
-.login-card label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 14px; color: #dbe4f0; }
-.login-card input { display: block; width: 100%; margin-top: 6px; padding: 10px 11px; border: 1px solid rgba(255,255,255,0.28); border-radius: 6px; font-size: 16px; background: rgba(255,255,255,0.06); color: #fff; }
-.login-card input::placeholder { color: #9fb0c6; }
-.login-card .hint { color: #b8c4d6; }
-.login-card .hint a { color: #dbe4f0; }
-.login-card .btn-primary { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.35); }
-.login-card .btn-primary:hover { background: rgba(255,255,255,0.2); }
-.login-card .alert-error { background: rgba(179,38,30,0.25); border: 1px solid rgba(255,255,255,0.28); color: #ffd7d3; }
+.login-card { width: 360px; }
+.login-card label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 14px; }
+.login-card input { display: block; width: 100%; margin-top: 6px; padding: 10px 11px; border: 1px solid var(--border); border-radius: 6px; font-size: 16px; }
 .success-card { text-align: center; }
 .success-card h1 { color: var(--green); }
 .rank-table { width: 100%; border-collapse: collapse; background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
@@ -335,11 +327,15 @@ function rowTotal(row) {
   if (values.some((v) => v === null || v === undefined)) return null;
   return Math.round(values.reduce((s, v) => s + v, 0) * 10) / 10;
 }
-function grandTotal(judgeScores) {
-  if (!judgeScores) return null;
-  const totals = JUDGES.map((j) => rowTotal(judgeScores[j.id]));
-  if (totals.some((t) => t === null)) return null;
-  return Math.round(totals.reduce((s, t) => s + t, 0) * 10) / 10;
+// Not every judge scores every applicant, so the headline number is an average
+// across whichever judges DID submit a complete score, not a sum that requires
+// all 10 to have scored.
+function judgesAverage(judgeScores) {
+  if (!judgeScores) return { average: null, count: 0 };
+  const totals = JUDGES.map((j) => rowTotal(judgeScores[j.id])).filter((t) => t !== null);
+  if (!totals.length) return { average: null, count: 0 };
+  const average = Math.round((totals.reduce((s, t) => s + t, 0) / totals.length) * 10) / 10;
+  return { average, count: totals.length };
 }
 
 /* ---------------- Eligibility scoring (mirrors ranking.js) ---------------- */
@@ -460,7 +456,7 @@ function header(opts) {
     </div>
   </header>`;
 }
-const FOOTER = `<footer class="site-footer"><div class="wrap">CIM Vancouver Branch Student Awards Portal (Grad Studies Award + Turnbull Cup Photo Contest). Not an official CIM website. Submissions are stored on the branch's Google Sheet/Drive backend.</div></footer>`;
+const FOOTER = '';
 const SETUP_BANNER = BACKEND_CONFIGURED ? '' : `<div class="demo-banner">Setup needed: this page's <code>BACKEND_URL</code> constant (top of the &lt;script&gt; block) still has its placeholder value, so submissions can't be saved yet. Deploy the included Apps Script backend and paste the Web App URL in — see SETUP.md.</div>`;
 
 function sel(current, value) { return current === value ? 'selected' : ''; }
@@ -864,8 +860,10 @@ function criterionMet(app, criterionId) {
 }
 function critIcon(met) { return met ? `<span class="crit-yes">&#10003; Yes</span>` : `<span class="crit-no">&#10007; No</span>`; }
 function totalScoreCell(app) {
-  const total = grandTotal(app.judgeScores);
-  return total === null ? `<span class="hint">Not yet scored</span>` : `<strong>${total}</strong> <span class="hint">/ ${MAX_GRAND_TOTAL}</span>`;
+  const { average, count } = judgesAverage(app.judgeScores);
+  return average === null
+    ? `<span class="hint">Not yet scored</span>`
+    : `<strong>${average}</strong> <span class="hint">/ ${MAX_ROW_TOTAL} (avg of ${count} judge${count === 1 ? '' : 's'})</span>`;
 }
 
 function applicantRow(app, i) {
@@ -876,7 +874,7 @@ function applicantRow(app, i) {
       <td data-label="Graduate Student Criteria">${critIcon(criterionMet(app, 'phd-or-thesis-masters'))}</td>
       <td data-label="First-Year Criteria">${critIcon(criterionMet(app, 'first-year-grad'))}</td>
       <td data-label="UBC/SFU Criteria">${critIcon(criterionMet(app, 'eligible-institution-department'))}</td>
-      <td data-label="Judges' Total Score">${totalScoreCell(app)}</td>
+      <td data-label="Judges' Average Score">${totalScoreCell(app)}</td>
       <td class="hint" data-label="Submitted">${new Date(app.submittedAt).toLocaleDateString()}</td>
       <td data-label="" class="view-cell"><button class="btn-secondary btn-small" onclick="go('adminApplication', {selectedApplicationId:'${app.id}'})">View</button></td>
     </tr>`;
@@ -885,7 +883,7 @@ function applicantRow(app, i) {
 function applicantTable(list) {
   if (!list.length) return `<p class="empty-state">No applications in this category yet.</p>`;
   const rows = list.map((app, i) => applicantRow(app, i)).join('');
-  return `<table class="rank-table"><thead><tr><th>#</th><th>Applicant</th><th>Graduate Student Criteria</th><th>First-Year Criteria</th><th>UBC/SFU Criteria</th><th>Judges' Total Score</th><th>Submitted</th><th></th></tr></thead><tbody>${rows}</tbody></table>`;
+  return `<table class="rank-table"><thead><tr><th>#</th><th>Applicant</th><th>Graduate Student Criteria</th><th>First-Year Criteria</th><th>UBC/SFU Criteria</th><th>Judges' Average Score</th><th>Submitted</th><th></th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 
 function turnbullRow(sub, i) {
@@ -1088,12 +1086,12 @@ function judgingRubricSection(application) {
   const aiRowData = application.judgeScores[AI_ROW.id] || emptyRow('ai');
   const aiCells = DIMENSIONS.map((d) => `<td>${scoreInput(AI_ROW.id, d, aiRowData[d.id])}</td>`).join('');
   const aiTotal = rowTotal(aiRowData);
-  const grand = grandTotal(application.judgeScores);
+  const { average: judgesAvg, count: judgesCount } = judgesAverage(application.judgeScores);
 
   return `
     <section class="intro-card">
       <h2>Judging rubric</h2>
-      <p class="hint">Each of the ${JUDGES.length} panel judges can add their name and scores the application 0–10 on four dimensions. The grand total reflects only the named judges.</p>
+      <p class="hint">Each of the ${JUDGES.length} panel judges can add their name and scores the application 0–10 on four dimensions. The average below reflects only judges who have submitted a complete score — not every judge needs to score every applicant.</p>
       <form id="scoresForm">
         <div class="table-scroll">
           <table class="scoring-table">
@@ -1102,13 +1100,13 @@ function judgingRubricSection(application) {
               ${rows}
               <tr class="ai-row"><td class="judge-label">${escapeHtml(AI_ROW.label)}</td>${aiCells}<td class="row-total">${aiTotal === null ? '—' : aiTotal}</td></tr>
             </tbody>
-            <tfoot><tr><td colspan="${DIMENSIONS.length + 1}">Grand Total (named judges only)</td><td class="grand-total">${grand === null ? 'Incomplete' : grand + ' / ' + MAX_GRAND_TOTAL}</td></tr></tfoot>
+            <tfoot><tr><td colspan="${DIMENSIONS.length + 1}">Judges' Average Score</td><td class="grand-total">${judgesAvg === null ? 'Not yet scored' : judgesAvg + ' / ' + MAX_ROW_TOTAL + ' (avg of ' + judgesCount + ' judge' + (judgesCount === 1 ? '' : 's') + ')'}</td></tr></tfoot>
           </table>
         </div>
         <label class="ai-notes-label">AI reasoning (optional, editable)
           <textarea name="ai_notes" rows="3" class="ai-notes-textarea" placeholder="Short rationale behind the AI preliminary read...">${escapeHtml(aiRowData.notes || '')}</textarea>
         </label>
-        <p class="hint ai-disclaimer">The "${escapeHtml(AI_ROW.label)}" row is an optional, preliminary AI-assisted read entered by whoever processes the application — it does <strong>not</strong> carry the subject-matter expertise of the panel judges, is not a substitute for expert review, and is excluded from the judges' grand total above. Treat it as a rough first impression only.</p>
+        <p class="hint ai-disclaimer">The "${escapeHtml(AI_ROW.label)}" row is an optional, preliminary AI-assisted read entered by whoever processes the application — it does <strong>not</strong> carry the subject-matter expertise of the panel judges, is not a substitute for expert review, and is excluded from the judges' average score above. Treat it as a rough first impression only.</p>
         <button type="submit" class="btn-primary" id="scoresSaveBtn">Save Scores</button>
       </form>
     </section>`;
