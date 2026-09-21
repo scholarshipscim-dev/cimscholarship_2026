@@ -253,6 +253,7 @@ const SCHOLARSHIP = {
   sponsor: 'CIM Vancouver Branch',
   amount: '$2,000 (3 available)',
   deadline: 'November 5, 2026',
+  contactEmail: 'vancouver@cim.org',
   eligibilityText: 'Contest open to all earth science and mineral engineering related graduate students in the first year of a M.A.Sc, M.Sc or Ph.D program in the Greater Vancouver area. Please see award announcement for application details. The successful applicants are selected by a panel of experts from the CIM Vancouver branch.',
   detailedEligibilityText: "Per the award announcement: first-year graduate students enrolled in either a Ph.D. or research-based (thesis) Master's program at the University of British Columbia (Mining Engineering, Materials Engineering, Geological Engineering, or Earth and Ocean Sciences) or Simon Fraser University (Earth Sciences). If your program isn't listed, select \"Other (please specify)\" and tell us your program. Master of Engineering (M.Eng.) non-thesis students are not eligible for this award.",
   applicationPackageText: "A complete application includes: a Research Summary of the applicant's current or proposed research (maximum 3 pages), a one-page Resume including contact information, a Cover Letter, and Proof of Enrollment documenting full-time registration as a first-year graduate student.",
@@ -285,6 +286,7 @@ const TURNBULL_CUP = {
   amount: '$1,000 (top photo) + the Turnbull Cup awarded to the winning photographer’s student society',
   deadline: 'November 5, 2026',
   contactEmail: 'Alex.Doll@cimvancouver.org',
+  contactEmail2: 'vancouver@cim.org',
   eligibilityText: 'Contest is open to all Earth-Science and Mineral Engineering related graduate, undergraduate, or technical college students in the greater Vancouver area.',
   prizesText: 'The photographer of the single best photo submitted will be awarded a $1,000 prize and the student society the photographer belongs to will be awarded the Turnbull Cup. Judging will be done by the CIM Vancouver Branch Executive Committee.',
   rules: [
@@ -480,14 +482,14 @@ function renderHome() {
           <div class="program-eyebrow">Graduate research award</div>
           <h2>${escapeHtml(SCHOLARSHIP.name)}</h2>
           <p class="blurb">${escapeHtml(SCHOLARSHIP.eligibilityText)}</p>
-          <p class="program-meta">${escapeHtml(SCHOLARSHIP.amount)} &middot; ${escapeHtml(SCHOLARSHIP.deadline)}</p>
+          <p class="program-meta">${escapeHtml(SCHOLARSHIP.amount)} &middot; Deadline: ${escapeHtml(SCHOLARSHIP.deadline)}</p>
           <button class="btn-primary" onclick="go('apply', {formValues:{}})">Apply for the Grad Studies Award</button>
         </div>
         <div class="program-card">
           <div class="program-eyebrow">Photo contest</div>
           <h2>${escapeHtml(TURNBULL_CUP.name)}</h2>
           <p class="blurb">${escapeHtml(TURNBULL_CUP.eligibilityText)}</p>
-          <p class="program-meta">${escapeHtml(TURNBULL_CUP.amount)} &middot; ${escapeHtml(TURNBULL_CUP.deadline)}</p>
+          <p class="program-meta">${escapeHtml(TURNBULL_CUP.amount)} &middot; Deadline: ${escapeHtml(TURNBULL_CUP.deadline)}</p>
           <button class="btn-primary" onclick="go('turnbullApply', {formValues:{}})">Enter the Turnbull Cup</button>
         </div>
       </div>
@@ -515,6 +517,7 @@ function renderApply() {
           <p class="elig-text">${escapeHtml(SCHOLARSHIP.detailedEligibilityText)}</p>
           <p class="elig-text"><strong>Application package:</strong> ${escapeHtml(SCHOLARSHIP.applicationPackageText)}</p>
           <p class="elig-text"><strong>Please note:</strong> ${escapeHtml(SCHOLARSHIP.studentNightText)}</p>
+          <p class="elig-text"><strong>Contact:</strong> <a href="mailto:${escapeHtml(SCHOLARSHIP.contactEmail)}">${escapeHtml(SCHOLARSHIP.contactEmail)}</a></p>
         </details>
       </section>
       ${errorsHtml}
@@ -700,7 +703,7 @@ function renderTurnbullApply() {
           <p class="elig-text"><strong>Prizes:</strong> ${escapeHtml(TURNBULL_CUP.prizesText)}</p>
           <p class="elig-text"><strong>Rules:</strong></p>
           <ul class="rules-list">${rulesHtml}</ul>
-          <p class="elig-text"><strong>Contact:</strong> <a href="mailto:${escapeHtml(TURNBULL_CUP.contactEmail)}">${escapeHtml(TURNBULL_CUP.contactEmail)}</a></p>
+          <p class="elig-text"><strong>Contact:</strong> <a href="mailto:${escapeHtml(TURNBULL_CUP.contactEmail)}">${escapeHtml(TURNBULL_CUP.contactEmail)}</a> or <a href="mailto:${escapeHtml(TURNBULL_CUP.contactEmail2)}">${escapeHtml(TURNBULL_CUP.contactEmail2)}</a></p>
         </details>
       </section>
       ${errorsHtml}
